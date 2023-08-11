@@ -2,6 +2,8 @@ package com.notrew.bank.modules.account.entities;
 
 import com.notrew.bank.shared.utils.AccountNumberGenerator;
 import com.notrew.bank.shared.utils.UUIDGenerator;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.Instant;
 
@@ -49,11 +51,17 @@ public class Account implements Actions {
 
     @Override
     public void deposit(double amount) {
-
+        this.balance += amount;
     }
 
     @Override
     public void withDraw(double amount) {
+        if (getBalance() > amount) {
+            balance -= amount;
+        } else {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Balance is insufficient");
+        }
+
     }
 
 
