@@ -1,11 +1,9 @@
 package com.notrew.bank.modules.account.controllers;
 
 import com.notrew.bank.modules.account.dto.AccountDto;
+import com.notrew.bank.modules.account.dto.OperationDto;
 import com.notrew.bank.modules.account.factories.AccountFactory;
-import com.notrew.bank.modules.account.usecases.CreateAccountUseCase;
-import com.notrew.bank.modules.account.usecases.DeleteAccountUseCase;
-import com.notrew.bank.modules.account.usecases.GetAccountUseCase;
-import com.notrew.bank.modules.account.usecases.GetAllAccountUseCase;
+import com.notrew.bank.modules.account.usecases.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,13 +16,17 @@ public class AccountController {
     private final GetAllAccountUseCase getAllAccountUseCase;
     private final CreateAccountUseCase createAccountUseCase;
     private final DeleteAccountUseCase deleteAccountUseCase;
+    private final WithDrawUseCase withDrawUseCase;
+    private final DepositUseCase depositUseCase;
 
     @Autowired
-    public AccountController(GetAccountUseCase getAccountUseCase, GetAllAccountUseCase getAllAccountUseCase, CreateAccountUseCase createAccountUseCase, DeleteAccountUseCase deleteAccountUseCase) {
+    public AccountController(GetAccountUseCase getAccountUseCase, GetAllAccountUseCase getAllAccountUseCase, CreateAccountUseCase createAccountUseCase, DeleteAccountUseCase deleteAccountUseCase, WithDrawUseCase withDrawUseCase, DepositUseCase depositUseCase) {
         this.getAccountUseCase = getAccountUseCase;
         this.getAllAccountUseCase = getAllAccountUseCase;
         this.createAccountUseCase = createAccountUseCase;
         this.deleteAccountUseCase = deleteAccountUseCase;
+        this.withDrawUseCase = withDrawUseCase;
+        this.depositUseCase = depositUseCase;
     }
 
     @GetMapping("/get-all")
@@ -71,6 +73,27 @@ public class AccountController {
             return ResponseEntity.status(ex.getStatusCode()).body(ex.getReason());
         }
 
+    }
+
+    @PutMapping("/withdraw")
+    public ResponseEntity<?> withDrawAccount(@RequestParam(name = "id") String id, @RequestBody OperationDto operationDto) {
+        try {
+            withDrawUseCase.call(id, operationDto.amount());
+            return ResponseEntity.status(HttpStatus.CREATED).body("Account withdrawn with success");
+        } catch (ResponseStatusException ex) {
+            return ResponseEntity.status(ex.getStatusCode()).body(ex.getReason());
+        }
+
+    }
+
+    @PutMapping("/deposit")
+    public ResponseEntity<?> depositAccount(@RequestParam(name = "id") String id, @RequestBody OperationDto operationDto) {
+        try {
+            depositUseCase.call(id, operationDto.amount());
+            return ResponseEntity.status(HttpStatus.CREATED).body("Account deposited with success");
+        } catch (ResponseStatusException ex) {
+            return ResponseEntity.status(ex.getStatusCode()).body(ex.getReason());
+        }
 
     }
 

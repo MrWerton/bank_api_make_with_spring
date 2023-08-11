@@ -23,6 +23,7 @@ public class AccountRepositoryImp implements AccountRepository {
     public void deposit(String id, double amount) {
         this.db.accounts.forEach(item -> {
             if (item.getUUID().equals(id)) {
+                item.getBalance();
                 item.deposit(amount);
             }
         });
