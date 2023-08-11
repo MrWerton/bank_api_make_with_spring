@@ -12,8 +12,8 @@ public class AccountFactory {
     public static Account create(AccountDto accountDto) {
         final String type = accountDto.type().toLowerCase();
         return switch (type) {
-            case "fisico" -> new Physical(accountDto.name(), accountDto.cpf());
-            case "juridico" -> new Legal(accountDto.name(), accountDto.cnpj());
+            case "fisica" -> new Physical(accountDto.name(), accountDto.cpf());
+            case "juridica" -> new Legal(accountDto.name(), accountDto.cnpj());
             default -> throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "type of account not is valid");
         };
