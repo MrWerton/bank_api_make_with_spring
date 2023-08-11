@@ -1,5 +1,6 @@
 package com.notrew.bank.modules.account.entities;
 
+import com.notrew.bank.shared.utils.AccountNumberGenerator;
 import com.notrew.bank.shared.utils.UUIDGenerator;
 
 import java.time.Instant;
@@ -10,12 +11,18 @@ public abstract class Account {
     private final String name;
     private final String number;
     private final Instant createdAt;
+    protected double balance;
 
-    protected Account(String name, String number) {
+    protected Account(String name) {
+        this.balance = 0;
         UUID = UUIDGenerator.generate();
         this.name = name;
-        this.number = number;
+        this.number = AccountNumberGenerator.generate();
         this.createdAt = Instant.now();
+    }
+
+    public double getBalance() {
+        return balance;
     }
 
     public String getUUID() {
@@ -33,6 +40,11 @@ public abstract class Account {
     public Instant getCreatedAt() {
         return createdAt;
     }
+
+
+    public abstract void deposit(double amount);
+
+    public abstract void withDraw(double amount);
 
 
 }
