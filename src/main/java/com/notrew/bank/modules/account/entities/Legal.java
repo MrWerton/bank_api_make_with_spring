@@ -5,9 +5,13 @@ public class Legal {
     private final String cnpj;
     private final Account properties;
 
-    public Legal(String name, String cnpj, Account properties) {
+    public Legal(String cnpj, Account properties) {
         this.properties = properties;
         this.cnpj = cnpj;
+    }
+
+    public Account getProperties() {
+        return properties;
     }
 
     public String getCnpj() {
