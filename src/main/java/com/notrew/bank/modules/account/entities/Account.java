@@ -5,7 +5,13 @@ import com.notrew.bank.shared.utils.UUIDGenerator;
 
 import java.time.Instant;
 
-public abstract class Account {
+interface Actions {
+    void deposit(double amount);
+
+    void withDraw(double amount);
+}
+
+public class Account implements Actions {
 
     private final String UUID;
     private final String name;
@@ -41,10 +47,14 @@ public abstract class Account {
         return createdAt;
     }
 
+    @Override
+    public void deposit(double amount) {
 
-    public abstract void deposit(double amount);
+    }
 
-    public abstract void withDraw(double amount);
+    @Override
+    public void withDraw(double amount) {
+    }
 
 
 }

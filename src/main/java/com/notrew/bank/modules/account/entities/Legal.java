@@ -4,12 +4,12 @@ package com.notrew.bank.modules.account.entities;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
-public class Legal extends Account {
-
+public class Legal {
     private final String cnpj;
+    private final Account properties;
 
-    public Legal(String name, String cnpj) {
-        super(name);
+    public Legal(String name, String cnpj, Account properties) {
+        this.properties = properties;
         this.cnpj = cnpj;
     }
 
@@ -17,15 +17,13 @@ public class Legal extends Account {
         return cnpj;
     }
 
-    @Override
     public void deposit(double amount) {
-        super.balance += amount;
+        properties.balance += amount;
     }
 
-    @Override
     public void withDraw(double amount) {
-        if (super.getBalance() > amount) {
-            super.balance -= amount;
+        if (properties.getBalance() > amount) {
+            properties.balance -= amount;
         } else {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Balance is insufficient");
         }
